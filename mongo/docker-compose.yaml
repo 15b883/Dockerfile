@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0  # 使用 MongoDB 7.0 官方镜像，可根据需要更改版本
+    container_name: mongodb
+    restart: unless-stopped  # 容器异常退出时自动重启
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin  # 设置 MongoDB 管理员用户名
+      - MONGO_INITDB_ROOT_PASSWORD=your_secure_password  # 设置管理员密码
+    ports:
+      - "27017:27017"  # 映射 MongoDB 默认端口到宿主机
+    volumes:
+      - mongodb_data:/data/db  # 数据持久化挂载
+      - mongodb_logs:/var/log/mongodb  # 日志挂载
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro  # 初始化脚本（可选）
+    networks:
+      - mongo-network
+    command: mongod --logpath /var/log/mongodb/mongod.log  # 指定日志路径
+
+volumes:
+  mongodb_data:
+    name: mongodb_data  # 持久化数据卷
+  mongodb_logs:
+    name: mongodb_logs  # 持久化日志卷
+
+networks:
+  mongo-network:
+    driver: bridge  # 使用桥接网络

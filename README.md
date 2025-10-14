@@ -34,3 +34,11 @@ Run docker
 # docker run --rm -it python3.10:v1
 Hi Python3.10
 ```
+
+# docker images save
+
+```shell
+docker save -o nginx_image.tar nginx:latest  # Single Image  
+docker save -o my_images.tar ubuntu:22.04 redis:alpine # Multiple Images
+docker load < filename.tar  # load Images in local docker images
+```
